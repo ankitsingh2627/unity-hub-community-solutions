@@ -26,15 +26,16 @@ function EventsPage() {
   return (
     <div className="min-h-screen bg-background">
       <AppNav />
-      <div className="container mx-auto px-4 py-10">
-        <div className="mb-8">
-          <h1 className="font-display text-4xl font-black">Events & Polls</h1>
-          <p className="mt-1 text-muted-foreground">Plan together. Decide together.</p>
-        </div>
+      <div className="container mx-auto px-6 py-12 md:py-16">
+        <header className="mb-10 border-b border-border pb-6">
+          <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Sections · 03 — 04</span>
+          <h1 className="mt-3 font-display text-6xl leading-[0.95] md:text-8xl">Events &<br /><em className="italic text-primary">polls.</em></h1>
+          <p className="mt-3 max-w-xl text-foreground/75">Plan together. Decide together. Quietly.</p>
+        </header>
         <Tabs defaultValue="events">
-          <TabsList className="rounded-full bg-muted p-1">
-            <TabsTrigger value="events" className="rounded-full px-6">Events</TabsTrigger>
-            <TabsTrigger value="polls" className="rounded-full px-6">Polls</TabsTrigger>
+          <TabsList className="rounded-none border-b border-border bg-transparent p-0">
+            <TabsTrigger value="events" className="rounded-none border-b-2 border-transparent bg-transparent px-6 pb-3 font-mono text-xs uppercase tracking-[0.2em] data-[state=active]:border-foreground data-[state=active]:shadow-none">Events</TabsTrigger>
+            <TabsTrigger value="polls" className="rounded-none border-b-2 border-transparent bg-transparent px-6 pb-3 font-mono text-xs uppercase tracking-[0.2em] data-[state=active]:border-foreground data-[state=active]:shadow-none">Polls</TabsTrigger>
           </TabsList>
           <TabsContent value="events" className="mt-6"><EventsList /></TabsContent>
           <TabsContent value="polls" className="mt-6"><PollsList /></TabsContent>
@@ -85,39 +86,42 @@ function EventsList() {
       {role === "admin" && (
         <div className="mb-4 flex justify-end">
           <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild><Button className="rounded-full bg-gradient-primary shadow-playful"><Plus className="mr-1 h-4 w-4" /> New event</Button></DialogTrigger>
-            <DialogContent className="rounded-3xl">
-              <DialogHeader><DialogTitle className="font-display text-2xl">Create event</DialogTitle></DialogHeader>
-              <form onSubmit={submit} className="space-y-3">
-                <div><Label>Title</Label><Input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
-                <div><Label>Description</Label><Textarea rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
-                <div><Label>Location</Label><Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} /></div>
-                <div><Label>Date & time</Label><Input type="datetime-local" required value={form.event_date} onChange={(e) => setForm({ ...form, event_date: e.target.value })} /></div>
-                <Button type="submit" className="w-full rounded-full bg-gradient-primary shadow-playful">Create</Button>
+            <DialogTrigger asChild><Button className="rounded-full bg-foreground font-mono text-xs uppercase tracking-[0.2em] text-background hover:bg-primary"><Plus className="mr-1 h-3.5 w-3.5" /> New event</Button></DialogTrigger>
+            <DialogContent className="rounded-md">
+              <DialogHeader><DialogTitle className="font-display text-3xl">Create event</DialogTitle></DialogHeader>
+              <form onSubmit={submit} className="space-y-4">
+                <div><Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Title</Label><Input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
+                <div><Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Description</Label><Textarea rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
+                <div><Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Location</Label><Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} /></div>
+                <div><Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Date & time</Label><Input type="datetime-local" required value={form.event_date} onChange={(e) => setForm({ ...form, event_date: e.target.value })} /></div>
+                <Button type="submit" className="w-full rounded-full bg-foreground py-5 font-mono text-xs uppercase tracking-[0.2em] text-background hover:bg-primary">Create</Button>
               </form>
             </DialogContent>
           </Dialog>
         </div>
       )}
       <div className="grid gap-4 md:grid-cols-2">
-        {items.length === 0 && <div className="md:col-span-2 rounded-3xl bg-muted/40 p-10 text-center text-muted-foreground"><CalendarHeart className="mx-auto mb-2 h-8 w-8" />No upcoming events.</div>}
+        {items.length === 0 && <div className="md:col-span-2 border-y border-border py-20 text-center text-muted-foreground"><CalendarHeart className="mx-auto mb-2 h-6 w-6" /><span className="font-mono text-[10px] uppercase tracking-[0.25em]">No upcoming events</span></div>}
         {items.map((e) => {
           const date = new Date(e.event_date);
           const mine = rsvps[e.id]?.mine;
           return (
-            <article key={e.id} className="overflow-hidden rounded-3xl bg-card shadow-soft transition hover:shadow-playful">
-              <div className="bg-gradient-hero p-5 text-white">
-                <div className="font-display text-3xl font-black leading-none">{format(date, "dd")}</div>
-                <div className="text-sm font-semibold uppercase tracking-wider">{format(date, "MMM yyyy · HH:mm")}</div>
+            <article key={e.id} className="overflow-hidden rounded-md bg-card shadow-paper transition hover:shadow-lift">
+              <div className="flex items-end justify-between bg-foreground p-5 text-background">
+                <div className="font-display text-6xl leading-none">{format(date, "dd")}</div>
+                <div className="text-right font-mono text-[10px] uppercase tracking-[0.25em]">
+                  <div>{format(date, "MMM yyyy")}</div>
+                  <div className="text-background/70">{format(date, "HH:mm")} · {format(date, "EEEE")}</div>
+                </div>
               </div>
-              <div className="p-5">
-                <h3 className="font-display text-xl font-bold">{e.title}</h3>
-                {e.description && <p className="mt-1 text-sm text-muted-foreground">{e.description}</p>}
-                {e.location && <div className="mt-2 flex items-center gap-1 text-sm text-muted-foreground"><MapPin className="h-4 w-4" />{e.location}</div>}
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">{rsvps[e.id]?.count ?? 0} attending</span>
-                  <Button onClick={() => toggleRsvp(e)} size="sm" className={`rounded-full ${mine ? "bg-success text-white" : "bg-gradient-primary"} shadow-soft`}>
-                    {mine ? <><Check className="mr-1 h-4 w-4" /> Going</> : "RSVP"}
+              <div className="p-6">
+                <h3 className="font-display text-2xl leading-tight">{e.title}</h3>
+                {e.description && <p className="mt-2 text-sm leading-relaxed text-foreground/75">{e.description}</p>}
+                {e.location && <div className="mt-3 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground"><MapPin className="h-3 w-3" />{e.location}</div>}
+                <div className="mt-5 flex items-center justify-between border-t border-border pt-4">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{rsvps[e.id]?.count ?? 0} attending</span>
+                  <Button onClick={() => toggleRsvp(e)} size="sm" className={`rounded-full font-mono text-[10px] uppercase tracking-[0.2em] ${mine ? "bg-success text-background" : "bg-foreground text-background"}`}>
+                    {mine ? <><Check className="mr-1 h-3 w-3" /> Going</> : "RSVP"}
                   </Button>
                 </div>
               </div>
@@ -174,50 +178,51 @@ function PollsList() {
       {role === "admin" && (
         <div className="mb-4 flex justify-end">
           <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild><Button className="rounded-full bg-gradient-primary shadow-playful"><Plus className="mr-1 h-4 w-4" /> New poll</Button></DialogTrigger>
-            <DialogContent className="rounded-3xl">
-              <DialogHeader><DialogTitle className="font-display text-2xl">Create poll</DialogTitle></DialogHeader>
-              <form onSubmit={submit} className="space-y-3">
-                <div><Label>Question</Label><Input required value={form.question} onChange={(e) => setForm({ ...form, question: e.target.value })} /></div>
+            <DialogTrigger asChild><Button className="rounded-full bg-foreground font-mono text-xs uppercase tracking-[0.2em] text-background hover:bg-primary"><Plus className="mr-1 h-3.5 w-3.5" /> New poll</Button></DialogTrigger>
+            <DialogContent className="rounded-md">
+              <DialogHeader><DialogTitle className="font-display text-3xl">Create poll</DialogTitle></DialogHeader>
+              <form onSubmit={submit} className="space-y-4">
+                <div><Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Question</Label><Input required value={form.question} onChange={(e) => setForm({ ...form, question: e.target.value })} /></div>
                 <div className="space-y-2">
-                  <Label>Options</Label>
+                  <Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Options</Label>
                   {form.options.map((o, i) => (
                     <Input key={i} placeholder={`Option ${i + 1}`} value={o} onChange={(e) => { const n = [...form.options]; n[i] = e.target.value; setForm({ ...form, options: n }); }} />
                   ))}
-                  <Button type="button" variant="outline" size="sm" className="rounded-full" onClick={() => setForm({ ...form, options: [...form.options, ""] })}>+ Add option</Button>
+                  <Button type="button" variant="outline" size="sm" className="rounded-full font-mono text-[10px] uppercase tracking-[0.2em]" onClick={() => setForm({ ...form, options: [...form.options, ""] })}>+ Add option</Button>
                 </div>
-                <Button type="submit" className="w-full rounded-full bg-gradient-primary shadow-playful">Create poll</Button>
+                <Button type="submit" className="w-full rounded-full bg-foreground py-5 font-mono text-xs uppercase tracking-[0.2em] text-background hover:bg-primary">Create poll</Button>
               </form>
             </DialogContent>
           </Dialog>
         </div>
       )}
-      <div className="grid gap-4">
-        {polls.length === 0 && <div className="rounded-3xl bg-muted/40 p-10 text-center text-muted-foreground"><Vote className="mx-auto mb-2 h-8 w-8" />No active polls.</div>}
+      <div className="divide-y divide-border border-y border-border">
+        {polls.length === 0 && <div className="py-20 text-center text-muted-foreground"><Vote className="mx-auto mb-2 h-6 w-6" /><span className="font-mono text-[10px] uppercase tracking-[0.25em]">No active polls</span></div>}
         {polls.map((p) => {
           const data = votes[p.id] ?? { counts: p.options.map(() => 0), mine: null };
           const total = data.counts.reduce((a, b) => a + b, 0);
           const voted = data.mine !== null;
           return (
-            <article key={p.id} className="rounded-3xl bg-card p-6 shadow-soft">
-              <h3 className="font-display text-xl font-bold">{p.question}</h3>
-              <div className="mt-4 space-y-2">
+            <article key={p.id} className="py-8">
+              <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-accent">Poll</span>
+              <h3 className="mt-1 font-display text-3xl leading-tight">{p.question}</h3>
+              <div className="mt-5 space-y-2">
                 {p.options.map((opt, i) => {
                   const c = data.counts[i] ?? 0;
                   const pct = total ? Math.round((c / total) * 100) : 0;
                   const isMine = data.mine === i;
                   return (
-                    <button key={i} onClick={() => vote(p.id, i)} disabled={voted} className={`group relative w-full overflow-hidden rounded-2xl border-2 p-3 text-left transition ${isMine ? "border-primary bg-primary/5" : "border-transparent bg-muted/50 hover:border-primary/40"}`}>
-                      {voted && <div className="absolute inset-y-0 left-0 bg-gradient-primary/20" style={{ width: `${pct}%` }} />}
+                    <button key={i} onClick={() => vote(p.id, i)} disabled={voted} className={`group relative w-full overflow-hidden rounded-md border p-4 text-left transition ${isMine ? "border-foreground bg-muted" : "border-border hover:border-foreground"}`}>
+                      {voted && <div className="absolute inset-y-0 left-0 bg-foreground/10" style={{ width: `${pct}%` }} />}
                       <div className="relative flex items-center justify-between">
-                        <span className="font-medium">{opt} {isMine && <Check className="inline h-4 w-4 text-primary" />}</span>
-                        {voted && <span className="text-sm font-semibold text-muted-foreground">{pct}% · {c}</span>}
+                        <span className="font-display text-lg">{opt} {isMine && <Check className="inline h-4 w-4 text-primary" />}</span>
+                        {voted && <span className="font-mono text-xs text-muted-foreground">{pct}% · {c}</span>}
                       </div>
                     </button>
                   );
                 })}
               </div>
-              <div className="mt-3 text-xs text-muted-foreground">{total} vote{total !== 1 ? "s" : ""}</div>
+              <div className="mt-3 font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">{total} vote{total !== 1 ? "s" : ""}</div>
             </article>
           );
         })}

@@ -23,10 +23,10 @@ export const Route = createFileRoute("/announcements")({
 type A = { id: string; title: string; content: string; category: string; pinned: boolean; created_at: string };
 
 const catColor: Record<string, string> = {
-  general: "bg-secondary/30",
+  general: "bg-muted text-foreground",
   urgent: "bg-destructive/15 text-destructive",
-  maintenance: "bg-warning/25",
-  event: "bg-accent/30",
+  maintenance: "bg-warning/30 text-foreground",
+  event: "bg-accent/30 text-foreground",
 };
 
 function Announcements() {
@@ -58,52 +58,53 @@ function Announcements() {
   return (
     <div className="min-h-screen bg-background">
       <AppNav />
-      <div className="container mx-auto px-4 py-10">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h1 className="font-display text-4xl font-black">Announcements</h1>
-            <p className="mt-1 text-muted-foreground">All the latest from your society.</p>
-          </div>
+      <div className="container mx-auto px-6 py-12 md:py-16">
+        <header className="mb-10 border-b border-border pb-6">
+          <div className="flex items-baseline justify-between gap-4">
+            <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Section · 02</span>
           {role === "admin" && (
             <Dialog open={open} onOpenChange={setOpen}>
-              <DialogTrigger asChild><Button className="rounded-full bg-gradient-primary shadow-playful"><Plus className="mr-1 h-4 w-4" /> New notice</Button></DialogTrigger>
-              <DialogContent className="rounded-3xl">
-                <DialogHeader><DialogTitle className="font-display text-2xl">Post an announcement</DialogTitle></DialogHeader>
-                <form onSubmit={submit} className="space-y-3">
-                  <div><Label>Title</Label><Input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
-                  <div><Label>Content</Label><Textarea required rows={5} value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} /></div>
-                  <div><Label>Category</Label>
+              <DialogTrigger asChild><Button className="rounded-full bg-foreground font-mono text-xs uppercase tracking-[0.2em] text-background hover:bg-primary"><Plus className="mr-1 h-3.5 w-3.5" /> New</Button></DialogTrigger>
+              <DialogContent className="rounded-md">
+                <DialogHeader><DialogTitle className="font-display text-3xl">Post a notice</DialogTitle></DialogHeader>
+                <form onSubmit={submit} className="space-y-4">
+                  <div><Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Title</Label><Input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
+                  <div><Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Content</Label><Textarea required rows={5} value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} /></div>
+                  <div><Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Category</Label>
                     <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v })}>
                       <SelectTrigger><SelectValue /></SelectTrigger>
                       <SelectContent>{["general","urgent","maintenance","event"].map(c=><SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
                     </Select>
                   </div>
-                  <div className="flex items-center justify-between rounded-xl bg-muted/50 px-4 py-3">
+                  <div className="flex items-center justify-between border-t border-b border-border py-3">
                     <Label htmlFor="pin" className="cursor-pointer">Pin to top</Label>
                     <Switch id="pin" checked={form.pinned} onCheckedChange={(v) => setForm({ ...form, pinned: v })} />
                   </div>
-                  <Button type="submit" className="w-full rounded-full bg-gradient-primary shadow-playful">Post</Button>
+                  <Button type="submit" className="w-full rounded-full bg-foreground py-5 font-mono text-xs uppercase tracking-[0.2em] text-background hover:bg-primary">Post</Button>
                 </form>
               </DialogContent>
             </Dialog>
           )}
-        </div>
+          </div>
+          <h1 className="mt-3 font-display text-6xl leading-[0.95] md:text-8xl">Notices<em className="italic text-primary">.</em></h1>
+          <p className="mt-3 max-w-xl text-foreground/75">All the latest from your society — pinned, dated, never lost.</p>
+        </header>
 
-        <div className="grid gap-4">
-          {items.length === 0 && <div className="rounded-3xl bg-muted/40 p-10 text-center text-muted-foreground"><Megaphone className="mx-auto mb-2 h-8 w-8" />No announcements yet.</div>}
+        <div className="divide-y divide-border border-y border-border">
+          {items.length === 0 && <div className="py-20 text-center text-muted-foreground"><Megaphone className="mx-auto mb-2 h-6 w-6" /><span className="font-mono text-[10px] uppercase tracking-[0.25em]">No announcements yet</span></div>}
           {items.map((a) => (
-            <article key={a.id} className={`rounded-3xl bg-card p-6 shadow-soft transition hover:shadow-playful ${a.pinned ? "ring-2 ring-primary/40" : ""}`}>
+            <article key={a.id} className={`py-8 transition hover:bg-muted/30 -mx-2 px-2 ${a.pinned ? "border-l-2 border-primary pl-6" : ""}`}>
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    {a.pinned && <Pin className="h-4 w-4 text-primary" />}
-                    <h3 className="font-display text-xl font-bold">{a.title}</h3>
-                    <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${catColor[a.category] ?? "bg-muted"}`}>{a.category}</span>
+                  <div className="flex flex-wrap items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em]">
+                    {a.pinned && <span className="flex items-center gap-1 text-primary"><Pin className="h-3 w-3" /> pinned</span>}
+                    <span className={`rounded-full px-2.5 py-0.5 ${catColor[a.category] ?? "bg-muted"}`}>{a.category}</span>
+                    <span className="text-muted-foreground">· {formatDistanceToNow(new Date(a.created_at), { addSuffix: true })}</span>
                   </div>
-                  <p className="mt-2 whitespace-pre-line text-sm text-foreground/90">{a.content}</p>
-                  <div className="mt-3 text-xs text-muted-foreground">{formatDistanceToNow(new Date(a.created_at), { addSuffix: true })}</div>
+                  <h3 className="mt-2 font-display text-3xl leading-tight">{a.title}</h3>
+                  <p className="mt-3 max-w-3xl whitespace-pre-line leading-relaxed text-foreground/85">{a.content}</p>
                 </div>
-                {role === "admin" && <Button variant="ghost" size="sm" onClick={() => remove(a.id)} className="text-destructive">Delete</Button>}
+                {role === "admin" && <button onClick={() => remove(a.id)} className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground hover:text-destructive">Delete</button>}
               </div>
             </article>
           ))}
