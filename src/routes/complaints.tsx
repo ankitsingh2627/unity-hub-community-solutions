@@ -68,7 +68,7 @@ function Complaints() {
   };
 
   const updateStatus = async (id: string, status: string) => {
-    await supabase.from("complaints").update({ status }).eq("id", id);
+    await supabase.from("complaints").update({ status: status as Complaint["status"] }).eq("id", id);
     toast.success("Status updated"); load();
   };
 
