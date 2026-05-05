@@ -1,35 +1,35 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
-import { LogOut } from "lucide-react";
+import { LogOut, Home } from "lucide-react";
 
 export function AppNav() {
   const { user, role, signOut } = useAuth();
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
-      <div className="container mx-auto flex h-16 items-center justify-between px-6">
-        <Link to="/" className="group flex items-baseline gap-2">
-          <span className="font-display text-2xl font-medium tracking-tight">unityhub</span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">est.2026</span>
+    <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
+      <div className="container mx-auto flex h-14 items-center justify-between px-6">
+        <Link to="/" className="flex items-center gap-2 font-semibold">
+          <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
+            <Home className="h-4 w-4" />
+          </span>
+          UnityHub
         </Link>
         {user ? (
-          <nav className="flex items-center gap-5 text-sm">
+          <nav className="flex items-center gap-1 sm:gap-2 text-sm">
             <NavLink to="/dashboard" label="Home" />
-            <NavLink to="/complaints" label="Issues" />
+            <NavLink to="/complaints" label="Complaints" />
             <NavLink to="/announcements" label="Notices" />
             <NavLink to="/events" label="Events" />
             {role === "admin" && (
-              <span className="hidden font-mono text-[10px] uppercase tracking-[0.2em] text-accent sm:inline">·admin</span>
+              <span className="hidden sm:inline rounded-full bg-primary/10 text-primary px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide">Admin</span>
             )}
-            <button onClick={async () => { await signOut(); navigate({ to: "/" }); }} aria-label="Sign out" className="text-muted-foreground hover:text-foreground transition">
+            <button onClick={async () => { await signOut(); navigate({ to: "/" }); }} aria-label="Sign out" className="ml-1 rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition">
               <LogOut className="h-4 w-4" />
             </button>
           </nav>
         ) : (
-          <Link to="/auth" className="font-mono text-xs uppercase tracking-[0.2em] border-b border-foreground pb-0.5 hover:text-primary hover:border-primary transition">
-            Enter →
-          </Link>
+          <Link to="/auth" className="text-sm font-medium text-primary hover:underline">Sign in</Link>
         )}
       </div>
     </header>
@@ -40,8 +40,8 @@ function NavLink({ to, label }: { to: "/dashboard" | "/complaints" | "/announcem
   return (
     <Link
       to={to}
-      activeProps={{ className: "text-foreground after:scale-x-100" }}
-      className="relative font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground transition hover:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:scale-x-0 after:bg-foreground after:transition-transform after:origin-left"
+      activeProps={{ className: "bg-muted text-foreground" }}
+      className="rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition"
     >
       {label}
     </Link>
