@@ -1,38 +1,49 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
-import { Button } from "@/components/ui/button";
-import { Sparkles, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 
 export function AppNav() {
   const { user, role, signOut } = useAuth();
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-primary shadow-playful">
-            <Sparkles className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <span className="font-display text-xl font-bold">UnityHub</span>
+    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
+      <div className="container mx-auto flex h-16 items-center justify-between px-6">
+        <Link to="/" className="group flex items-baseline gap-2">
+          <span className="font-display text-2xl font-medium tracking-tight">unityhub</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">est.2026</span>
         </Link>
         {user ? (
-          <nav className="flex items-center gap-1 sm:gap-3 text-sm">
-            <Link to="/dashboard" activeProps={{ className: "text-primary font-semibold" }} className="px-2 py-1 hover:text-primary">Home</Link>
-            <Link to="/complaints" activeProps={{ className: "text-primary font-semibold" }} className="px-2 py-1 hover:text-primary">Issues</Link>
-            <Link to="/announcements" activeProps={{ className: "text-primary font-semibold" }} className="px-2 py-1 hover:text-primary">Notices</Link>
-            <Link to="/events" activeProps={{ className: "text-primary font-semibold" }} className="px-2 py-1 hover:text-primary">Events</Link>
+          <nav className="flex items-center gap-5 text-sm">
+            <NavLink to="/dashboard" label="Home" />
+            <NavLink to="/complaints" label="Issues" />
+            <NavLink to="/announcements" label="Notices" />
+            <NavLink to="/events" label="Events" />
             {role === "admin" && (
-              <span className="hidden sm:inline-flex items-center rounded-full bg-accent/40 px-2.5 py-0.5 text-xs font-semibold text-accent-foreground">Admin</span>
+              <span className="hidden font-mono text-[10px] uppercase tracking-[0.2em] text-accent sm:inline">·admin</span>
             )}
-            <Button variant="ghost" size="icon" onClick={async () => { await signOut(); navigate({ to: "/" }); }} aria-label="Sign out">
+            <button onClick={async () => { await signOut(); navigate({ to: "/" }); }} aria-label="Sign out" className="text-muted-foreground hover:text-foreground transition">
               <LogOut className="h-4 w-4" />
-            </Button>
+            </button>
           </nav>
         ) : (
-          <Link to="/auth"><Button className="rounded-full bg-gradient-primary shadow-playful hover:opacity-90">Sign in</Button></Link>
+          <Link to="/auth" className="font-mono text-xs uppercase tracking-[0.2em] border-b border-foreground pb-0.5 hover:text-primary hover:border-primary transition">
+            Enter →
+          </Link>
         )}
       </div>
     </header>
+  );
+}
+
+function NavLink({ to, label }: { to: "/dashboard" | "/complaints" | "/announcements" | "/events"; label: string }) {
+  return (
+    <Link
+      to={to}
+      activeProps={{ className: "text-foreground after:scale-x-100" }}
+      className="relative font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground transition hover:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:scale-x-0 after:bg-foreground after:transition-transform after:origin-left"
+    >
+      {label}
+    </Link>
   );
 }
