@@ -36,7 +36,7 @@ function Complaints() {
   const [upvotes, setUpvotes] = useState<Record<string, { count: number; mine: boolean }>>({});
   const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState<string>("all");
-  const [form, setForm] = useState({ title: "", description: "", category: "Maintenance", priority: "medium" as const });
+  const [form, setForm] = useState<{ title: string; description: string; category: string; priority: "low" | "medium" | "high" }>({ title: "", description: "", category: "Maintenance", priority: "medium" });
 
   const load = async () => {
     const { data } = await supabase.from("complaints").select("*").order("created_at", { ascending: false });
