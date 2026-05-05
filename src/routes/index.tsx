@@ -1,107 +1,139 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { AppNav } from "@/components/AppNav";
 import { useAuth } from "@/hooks/use-auth";
-import hero from "@/assets/hero-community.jpg";
-import { MessageSquare, Megaphone, CalendarHeart, Vote, ShieldCheck, Sparkles } from "lucide-react";
+import hero from "@/assets/hero-courtyard.jpg";
 
 export const Route = createFileRoute("/")({
   component: Landing,
   head: () => ({
     meta: [
-      { title: "UnityHub — Society life, made playful" },
-      { name: "description", content: "A friendly app for residential societies to track complaints, share notices, plan events and run polls." },
+      { title: "UnityHub — A quieter way to live together" },
+      { name: "description", content: "An editorial, residents-first companion for societies. Issues, notices, events, and shared decisions." },
     ],
   }),
 });
+
+const features = [
+  { no: "01", k: "Issues", t: "Raised, upvoted, resolved.", d: "Lift acting up. Water again. The kind of complaints that should never need to be repeated." },
+  { no: "02", k: "Notices", t: "Read once. Pinned forever.", d: "Categorised announcements with a quiet hierarchy — urgent never shouts louder than it needs to." },
+  { no: "03", k: "Events", t: "RSVP, casually.", d: "From Diwali evenings to AGMs. One tap to confirm, one place to remember." },
+  { no: "04", k: "Polls", t: "Decide, together.", d: "Painters, vendors, festival themes — let the building speak before the WhatsApp wars begin." },
+];
 
 function Landing() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   useEffect(() => { if (!loading && user) navigate({ to: "/dashboard" }); }, [user, loading, navigate]);
 
-  const features = [
-    { icon: MessageSquare, title: "Issue Tracker", desc: "Raise complaints, upvote what matters, and watch them move from open to resolved.", color: "bg-primary/10 text-primary" },
-    { icon: Megaphone, title: "Announcements", desc: "Never miss a notice — pinned, categorised, beautifully delivered.", color: "bg-secondary/20 text-secondary-foreground" },
-    { icon: CalendarHeart, title: "Events & RSVPs", desc: "From Diwali parties to society meetings, plan and confirm in one tap.", color: "bg-accent/30 text-accent-foreground" },
-    { icon: Vote, title: "Community Polls", desc: "Decide together — pool maintenance, festival themes, vendor choices.", color: "bg-success/15 text-success" },
-  ];
-
   return (
     <div className="min-h-screen bg-background">
       <AppNav />
 
-      {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-hero opacity-20" />
-        <div className="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-primary/30 blur-3xl" />
-        <div className="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-accent/30 blur-3xl" />
-
-        <div className="container mx-auto grid gap-10 px-4 py-16 md:grid-cols-2 md:py-24 md:items-center">
-          <div className="space-y-6">
-            <span className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-1.5 text-xs font-semibold text-primary shadow-soft">
-              <Sparkles className="h-3.5 w-3.5" /> Final Year Project · Smart Society
-            </span>
-            <h1 className="font-display text-5xl font-black leading-[1.05] sm:text-6xl md:text-7xl">
-              Your society,<br />
-              <span className="bg-gradient-hero bg-clip-text text-transparent">united & happy.</span>
+      {/* Hero — editorial split */}
+      <section className="border-b border-border/60">
+        <div className="container mx-auto grid gap-10 px-6 py-16 md:grid-cols-12 md:gap-12 md:py-24">
+          <div className="md:col-span-7 flex flex-col justify-between">
+            <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+              <span className="h-px w-10 bg-foreground/40" />
+              Vol. I · Issue 01 · A society journal
+            </div>
+            <h1 className="mt-10 font-display text-[14vw] leading-[0.92] tracking-[-0.04em] text-balance md:mt-0 md:text-[clamp(64px,8.5vw,148px)]">
+              Living<br />together,<br /><em className="font-display italic text-primary">softly.</em>
             </h1>
-            <p className="max-w-lg text-lg text-muted-foreground">
-              UnityHub helps residents and admins solve everyday issues together — complaints, notices, events and votes, all in one playful place.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link to="/auth">
-                <Button size="lg" className="rounded-full bg-gradient-primary px-8 text-base font-semibold shadow-playful hover:opacity-90">
-                  Get started — it's free
-                </Button>
+            <div className="mt-10 grid gap-8 sm:grid-cols-[1fr_auto] sm:items-end">
+              <p className="max-w-md text-base leading-relaxed text-foreground/80">
+                UnityHub is a quiet, considered place for residents and managers to raise the small things, share the important ones, and decide on what matters — without the group-chat chaos.
+              </p>
+              <Link to="/auth" className="inline-flex items-center gap-3 self-start rounded-full bg-foreground px-7 py-3.5 font-mono text-xs uppercase tracking-[0.2em] text-background transition hover:bg-primary">
+                Begin →
               </Link>
-              <a href="#features">
-                <Button size="lg" variant="outline" className="rounded-full px-8 text-base">See features</Button>
-              </a>
-            </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <ShieldCheck className="h-4 w-4 text-success" /> Secure auth · Email & Google sign-in
             </div>
           </div>
-          <div className="relative">
-            <div className="absolute inset-0 -rotate-3 rounded-3xl bg-gradient-primary opacity-30 blur-2xl" />
-            <img src={hero} alt="Happy community of residents in a colorful apartment society" width={1536} height={1024} className="relative rounded-3xl shadow-playful" />
-          </div>
+
+          <figure className="md:col-span-5">
+            <div className="relative">
+              <img src={hero} alt="A sunlit residential courtyard with terracotta walls and potted plants" width={1080} height={1600} className="aspect-[3/4] w-full rounded-md object-cover shadow-paper" />
+              <figcaption className="mt-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                <span>Fig. 01</span>
+                <span>Courtyard, late light</span>
+              </figcaption>
+            </div>
+          </figure>
         </div>
       </section>
 
-      {/* Features */}
-      <section id="features" className="container mx-auto px-4 py-20">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-4xl font-bold sm:text-5xl">Everything your society needs</h2>
-          <p className="mt-3 text-muted-foreground">Designed for residents, loved by admins. Four delightful tools, one connected community.</p>
-        </div>
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((f) => (
-            <div key={f.title} className="group rounded-3xl bg-gradient-card p-6 shadow-soft transition hover:-translate-y-1 hover:shadow-playful">
-              <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl ${f.color}`}>
-                <f.icon className="h-6 w-6" />
-              </div>
-              <h3 className="font-display text-xl font-bold">{f.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{f.desc}</p>
+      {/* Marquee */}
+      <div className="overflow-hidden border-b border-border/60 bg-foreground py-4 text-background">
+        <div className="flex animate-marquee whitespace-nowrap font-display text-3xl italic md:text-4xl">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="flex shrink-0 items-center gap-10 pr-10">
+              <span>complaints, resolved</span><span className="text-accent">✦</span>
+              <span>notices, never missed</span><span className="text-accent">✦</span>
+              <span>events, attended</span><span className="text-accent">✦</span>
+              <span>decisions, shared</span><span className="text-accent">✦</span>
             </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Index — magazine TOC */}
+      <section className="container mx-auto px-6 py-20 md:py-28">
+        <div className="mb-14 flex items-baseline justify-between gap-4 border-b border-border pb-4">
+          <h2 className="font-display text-3xl md:text-5xl">Inside this issue</h2>
+          <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Index</span>
+        </div>
+        <div className="divide-y divide-border">
+          {features.map((f) => (
+            <article key={f.no} className="group grid grid-cols-12 items-baseline gap-4 py-8 transition hover:bg-muted/40 md:gap-8 md:py-10">
+              <span className="col-span-2 font-mono text-xs text-muted-foreground md:text-sm">{f.no}</span>
+              <div className="col-span-10 md:col-span-3">
+                <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-accent">{f.k}</span>
+                <h3 className="mt-1 font-display text-2xl md:text-4xl">{f.t}</h3>
+              </div>
+              <p className="col-span-12 max-w-xl text-foreground/75 md:col-span-6 md:col-start-7">{f.d}</p>
+              <div className="col-span-12 md:col-span-1 md:text-right">
+                <span className="font-mono text-xl text-muted-foreground transition group-hover:translate-x-1 group-hover:text-foreground inline-block">→</span>
+              </div>
+            </article>
           ))}
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="container mx-auto px-4 pb-24">
-        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-hero p-10 text-center shadow-playful sm:p-16">
-          <div className="absolute -top-20 -left-20 h-72 w-72 rounded-full bg-white/20 blur-3xl" />
-          <h2 className="font-display text-4xl font-black text-white sm:text-5xl">Ready to bring your society together?</h2>
-          <p className="mt-3 text-white/90">Join UnityHub today — the first signup becomes the admin.</p>
-          <Link to="/auth"><Button size="lg" className="mt-6 rounded-full bg-white px-8 text-base font-semibold text-primary shadow-soft hover:bg-white/90">Create your account</Button></Link>
+      {/* Quote block */}
+      <section className="border-y border-border/60 bg-gradient-warm">
+        <div className="container mx-auto px-6 py-20 text-center md:py-28">
+          <p className="mx-auto max-w-3xl font-display text-3xl italic leading-tight text-balance md:text-5xl">
+            “A society is not its walls; it is the small agreements made between the people inside them.”
+          </p>
+          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">— Editor's note</p>
         </div>
       </section>
 
-      <footer className="border-t border-border/60 py-8 text-center text-sm text-muted-foreground">
-        Made with ♥ — UnityHub © {new Date().getFullYear()}
+      {/* Closing CTA */}
+      <section className="container mx-auto px-6 py-24">
+        <div className="grid gap-8 md:grid-cols-12 md:items-end">
+          <div className="md:col-span-7">
+            <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Subscribe</span>
+            <h2 className="mt-3 font-display text-5xl leading-[0.95] md:text-7xl text-balance">
+              Move your society<br /><em className="italic text-primary">into print.</em>
+            </h2>
+          </div>
+          <div className="md:col-span-5">
+            <p className="text-foreground/75">The first resident to sign up becomes the editor — administrator of the society. Everyone else joins as a member, free.</p>
+            <Link to="/auth" className="mt-6 inline-flex items-center gap-3 rounded-full border border-foreground px-7 py-3.5 font-mono text-xs uppercase tracking-[0.2em] transition hover:bg-foreground hover:text-background">
+              Create your account →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <footer className="border-t border-border/60">
+        <div className="container mx-auto flex flex-wrap items-center justify-between gap-4 px-6 py-8 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+          <span>© {new Date().getFullYear()} UnityHub</span>
+          <span>Final year project · Smart society</span>
+          <span>Set in Fraunces & Plus Jakarta</span>
+        </div>
       </footer>
     </div>
   );
